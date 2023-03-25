@@ -1,0 +1,189 @@
+#include <Wire.h>
+#include <MPU6050.h>
+
+MPU6050 mpu;
+
+int16_t ax, ay, az;
+int16_t gx, gy, gz;
+int16_t prev_gz = 0;
+int16_t delta_gz = 0;
+float currentAngle = 0.0;
+float desiredAngle = 90.0;
+
+int IN1 = 2; 
+int IN2 = 3; 
+int IN3 = 4; 
+int IN4 = 5; 
+
+bool isTurning = false;
+unsigned long turnStartTime = 0;
+const unsigned long turnDuration = 1000; // 1000 milisegundos = 1 segundo
+
+void setup() {
+  Wire.begin();
+  Serial.begin(9600);
+
+  mpu.initialize();
+
+  mpu.setFullScaleGyroRange(MPU6050_GYRO_FS_250);
+  mpu.setDLPFMode(MPU6050_DLPF_BW_42);
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
+
+void loop() {
+  mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+
+  delta_gz = gz - prev_gz;
+  prev_gz = gz;
+
+  currentAngle += delta_gz * 0.0000611; // 0.0000611 = 1 / (250 Hz)
+
+  if (!isTurning && currentAngle < desiredAngle) {
+    // Comenzar el giro
+    isTurning = true;
+    turnStartTime = millis();
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, HIGH);
+  } else if (isTurning && (millis() - turnStartTime) >= turnDuration || currentAngle >= desiredAngle) {
+    // Detener el giro
+    isTurning = false;
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
+  }
+
+  Serial.print("Ángulo actual: ");
+  Serial.println(currentAngle);
+}
+\\
+
+
+
+
+
+  /*Seteo de velocidad a 60% en 4 motores*/
+  analogWrite(enA, 80);
+  analogWrite(enB, 80);
+  analogWrite(enC, 80);
+  analogWrite(enD, 80);
+
+  /*Ir adelante*/
+  digitalWrite(m1_1, HIGH);
+  digitalWrite(m1_2, LOW);
+  digitalWrite(m2_1, HIGH);
+  digitalWrite(m2_2, LOW);
+  digitalWrite(m3_1, HIGH);
+  digitalWrite(m3_2, LOW);
+  digitalWrite(m4_1, HIGH);
+  digitalWrite(m4_2, LOW);
+
+  delay(3000);
+
+  /*Detenerse*/
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, LOW);
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, LOW);
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, LOW);
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, LOW);
+
+  delay(3000);
+/*
+  
+  /*Ir a la derecha
+  digitalWrite(m1_1, HIGH);
+  digitalWrite(m1_2, LOW);
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, HIGH);
+  digitalWrite(m3_1, HIGH);
+  digitalWrite(m3_2, LOW);
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, HIGH);
+
+  delay(300);
+
+    /*Detenerse
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, LOW);
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, LOW);
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, LOW);
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, LOW);
+
+  delay(500);
+
+  
+  /*Ir izquierda
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, HIGH);
+  digitalWrite(m2_1, HIGH);
+  digitalWrite(m2_2, LOW);
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, HIGH);
+  digitalWrite(m4_1, HIGH);
+  digitalWrite(m4_2, LOW);
+
+  delay(300);
+
+    /*Detenerse
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, LOW);
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, LOW);
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, LOW);
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, LOW);
+
+  delay(500);
+
+  
+  /*Ir lateral derecha
+  digitalWrite(m1_1, HIGH);
+  digitalWrite(m1_2, LOW);
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, HIGH);
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, HIGH);
+  digitalWrite(m4_1, HIGH);
+  digitalWrite(m4_2, LOW);
+
+  delay(300);
+
+  
+    /*Detenerse
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, LOW);
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, LOW);
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, LOW);
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, LOW);
+
+  delay(500);
+
+  
+  /*Ir lateral IZQUIERDA
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, HIGH);
+  digitalWrite(m2_1, HIGH);
+  digitalWrite(m2_2, LOW);
+  digitalWrite(m3_1, HIGH);
+  digitalWrite(m3_2, LOW);
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, HIGH);
+
+  delay(300);
+  */
