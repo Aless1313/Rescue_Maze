@@ -4,14 +4,15 @@
 /*Declaración de variables para dirección de motores*/
 /*Siguiendo la siguiente estructura*/
 
-/*------------------ADELANTE---------------*/
-/*m1_1/m1_2                       m2_1/m2_2*/
-/*Delante Izq                   Delante Der*/
-/*                                         */
-/*                                         */
-/*m3_1/m3_2                        m4_1/4_2*/
-/*Atras Izq                       Atras Der*/
-/*---------------------ATRAS---------------*/
+
+            /*----------------SENSOR DELANTERO---------------*/
+            /*m1_1/m1_2                             m2_1/m2_2*/
+            /**//*Delante Izq                     Delante Der*/  /**/
+//SENSOR    /*                                               */  //SENSOR 
+//IZQUIERDO /*                                               */  //DERECHO
+            /**//*m3_1/m3_2                          m4_1/4_2*/  /**/
+            /*Atras Izq                             Atras Der*/
+            /*---------------------ATRAS---------------------*/
 
 /*Variables de giro de motor (puente H)*/
 #define m1_1 22           //
@@ -33,6 +34,25 @@
 #define enC 10            //Variable de Velocidad de motor m3
 #define enD 11            //Variable de Velocidad de motor m4
 
+//Variables de sensores ultrasonicos
+#define uft 2             //Ultrasonico Frontal Trigger
+#define ufe 3             //Ultrasonico Frontal Echo
+
+#define uit 4             //... Izquierdo ...
+#define uie 5             //... Izquierdo ...
+
+#define udt 6             //... Derecho ...
+#define ude 7             //... Derecho ...
+
+void adelante();
+void atras();
+void giroderecha();
+void giroizquierda();
+void stop();
+void lateralderecha();
+void lateralizquierda();
+
+
 void setup() {
   pinMode(m1_1, OUTPUT);      //
   pinMode(m1_2, OUTPUT);      //
@@ -48,110 +68,19 @@ void setup() {
   pinMode(enC, OUTPUT);       //
   pinMode(enD, OUTPUT);       //
 
+  pinMode(uft, OUTPUT);
+  pinMode(uit,OUTPUT);        //Declaramos todos los trigger como salida
+  pinMode(udt, OUTPUT);
+
+  pinMode(ufe, INPUT);
+  pinMode(uie, INPUT);
+  pinMode(ude, INPUT);
+
+  digitalWrite(uft, LOW);
+  digitalWrite(uit, LOW);     //Iniciamos en Bajo los trigger de los ultrasonicos
+  digitalWrite(udt, LOW);
+
 }
-
-//Función para ir hacia adelante
-void adelante(){
-  digitalWrite(m1_1, HIGH);
-  digitalWrite(m1_2, LOW);
-
-  digitalWrite(m2_1, HIGH);
-  digitalWrite(m2_2, LOW);
-
-  digitalWrite(m3_1, HIGH);
-  digitalWrite(m3_2, LOW);
-
-  digitalWrite(m4_1, HIGH);
-  digitalWrite(m4_2, LOW);
-}
-
-void atras(){
-  digitalWrite(m1_1, LOW);
-  digitalWrite(m1_2, HIGH);
-
-  digitalWrite(m2_1, LOW);
-  digitalWrite(m2_2, HIGH);
-  
-  digitalWrite(m3_1, LOW);
-  digitalWrite(m3_2, HIGH);
-  
-  digitalWrite(m4_1, LOW);
-  digitalWrite(m4_2, HIGH);
-}
-
-void giroderecha(){
-  digitalWrite(m1_1, HIGH);
-  digitalWrite(m1_2, LOW);
-  
-  digitalWrite(m2_1, LOW);
-  digitalWrite(m2_2, HIGH);
-  
-  digitalWrite(m3_1, HIGH);
-  digitalWrite(m3_2, LOW);
-  
-  digitalWrite(m4_1, LOW);
-  digitalWrite(m4_2, HIGH);
-}
-
-void giroizquierda(){
-  digitalWrite(m1_1, LOW);
-  digitalWrite(m1_2, HIGH);
-  
-  digitalWrite(m2_1, HIGH);
-  digitalWrite(m2_2, LOW);
-  
-  digitalWrite(m3_1, LOW);
-  digitalWrite(m3_2, HIGH);
-  
-  digitalWrite(m4_1, HIGH);
-  digitalWrite(m4_2, LOW);
-}
-
-void stop(){
-  digitalWrite(m1_1, LOW);
-  digitalWrite(m1_2, LOW);
-  
-  digitalWrite(m2_1, LOW);
-  digitalWrite(m2_2, LOW);
-  
-  digitalWrite(m3_1, LOW);
-  digitalWrite(m3_2, LOW);
-  
-  digitalWrite(m4_1, LOW);
-  digitalWrite(m4_2, LOW);
-}
-
-void lateralderecha(){
-  digitalWrite(m1_1, HIGH);
-  digitalWrite(m1_2, LOW);
-  
-  digitalWrite(m2_1, LOW);
-  digitalWrite(m2_2, HIGH);
-  
-  digitalWrite(m3_1, LOW);
-  digitalWrite(m3_2, HIGH);
-  
-  digitalWrite(m4_1, HIGH);
-  digitalWrite(m4_2, LOW);
-}
-
-void lateralizquierda(){
-  digitalWrite(m1_1, LOW);
-  digitalWrite(m1_2, HIGH);
-  
-  digitalWrite(m2_1, HIGH);
-  digitalWrite(m2_2, LOW);
-  
-  digitalWrite(m3_1, HIGH);
-  digitalWrite(m3_2, LOW);
-  
-  digitalWrite(m4_1, LOW);
-  digitalWrite(m4_2, HIGH);
-}
-
-//LA TABLA LÓGICA DE LOS GIROS ESTA EN ESTA CARPETA CON EL NOMBRE "Tabla logica.png"
-//Los giros estan en la imagen "Giros de robot.png"
-
 
 
 void loop() {
@@ -206,5 +135,114 @@ void loop() {
 //de ese motor en especifico 
 
 
+/************************ FUNCIONES DE MOVIMIENTO DEL ROBOT************************************************/
+
+//Ir adelante
+void adelante(){
+  digitalWrite(m1_1, HIGH);
+  digitalWrite(m1_2, LOW);
+
+  digitalWrite(m2_1, HIGH);
+  digitalWrite(m2_2, LOW);
+
+  digitalWrite(m3_1, HIGH);
+  digitalWrite(m3_2, LOW);
+
+  digitalWrite(m4_1, HIGH);
+  digitalWrite(m4_2, LOW);
+}
+
+//Ir atras
+void atras(){
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, HIGH);
+
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, HIGH);
+  
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, HIGH);
+  
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, HIGH);
+}
+
+//Giro a la derecha sobre su eje
+void giroderecha(){
+  digitalWrite(m1_1, HIGH);
+  digitalWrite(m1_2, LOW);
+  
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, HIGH);
+  
+  digitalWrite(m3_1, HIGH);
+  digitalWrite(m3_2, LOW);
+  
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, HIGH);
+}
+
+//Giro a la izquierda sobre su eje
+void giroizquierda(){
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, HIGH);
+  
+  digitalWrite(m2_1, HIGH);
+  digitalWrite(m2_2, LOW);
+  
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, HIGH);
+  
+  digitalWrite(m4_1, HIGH);
+  digitalWrite(m4_2, LOW);
+}
+
+//Detener el robot
+void stop(){
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, LOW);
+  
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, LOW);
+  
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, LOW);
+  
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, LOW);
+}
+
+//Movimiento lateral a la derecha
+void lateralderecha(){
+  digitalWrite(m1_1, HIGH);
+  digitalWrite(m1_2, LOW);
+  
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, HIGH);
+  
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, HIGH);
+  
+  digitalWrite(m4_1, HIGH);
+  digitalWrite(m4_2, LOW);
+}
+
+//Movimiento lateral a la izquierda
+void lateralizquierda(){
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, HIGH);
+  
+  digitalWrite(m2_1, HIGH);
+  digitalWrite(m2_2, LOW);
+  
+  digitalWrite(m3_1, HIGH);
+  digitalWrite(m3_2, LOW);
+  
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, HIGH);
+}
+
+//LA TABLA LÓGICA DE LOS GIROS ESTA EN ESTA CARPETA CON EL NOMBRE "Tabla logica.png"
+//Los giros estan en la imagen "Giros de robot.png"
 
 
