@@ -1,6 +1,5 @@
 #include <Arduino.h>
 
-
 /*Declaración de variables para dirección de motores*/
 /*Siguiendo la siguiente estructura*/
 
@@ -55,12 +54,11 @@ void giroizquierda();
 void stop();
 void lateralderecha();
 void lateralizquierda();
-void setvelocity();
+void setvelocity(int m1, int m2, int m3, int m4);
 int ladolibre();
 int distanciafrontal();
 int distanciaderecha();
 int distanciaizquierda();
-
 
 void setup() {
   pinMode(m1_1, OUTPUT);      //
