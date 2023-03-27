@@ -44,6 +44,10 @@
 #define udt 6             //... Derecho ...
 #define ude 7             //... Derecho ...
 
+//Variables de pantalla
+#define sda 20 
+#define scl 21
+
 void adelante();
 void atras();
 void giroderecha();
@@ -51,6 +55,11 @@ void giroizquierda();
 void stop();
 void lateralderecha();
 void lateralizquierda();
+void setvelocity();
+int ladolibre();
+int distanciafrontal();
+int distanciaderecha();
+int distanciaizquierda();
 
 
 void setup() {
