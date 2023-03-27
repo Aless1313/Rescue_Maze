@@ -187,3 +187,48 @@ void loop() {
 
   delay(300);
   */
+
+
+  
+  //Para establecer una velocidad a los motores hacemos
+  //una escritura analogica, ponemos el pin de velocidad
+  //de motor y la velocidad a asignar donde 255 es la máxima
+  analogWrite(enA, 255);    //Velocidad máxima
+  analogWrite(enB, 255);    //Velocidad máxima
+
+  analogWrite(enC, 255);    //Velocidad máxima
+  analogWrite(enD, 255);    //Velocidad máxima
+  
+  //Para mover el robot mandamos a llamar a las funciones 
+  //declaradas arriba, seguido de un delay de duración y 
+  //la siguiente accion
+
+  //Ejemplo si queremos mover hacia adelante 1 segundo
+  //luego detenerse 2 segundos
+  //luego ir atras 1 segundo
+
+  adelante();
+  delay(1000);
+  stop();
+  delay(2000);
+  atras();
+  delay(1000);
+
+  //la acción pasada la hizo con la velocidad establecida en las lineas 144-148
+  //Si queremos modificar la velocidad volvemos a hacer una escritura analogica con los nuevos valores de velocidad
+
+  analogWrite(enA, 150);    //Velocidad media
+  analogWrite(enB, 150);    //Velocidad media
+
+  analogWrite(enC, 150);    //Velocidad media
+  analogWrite(enD, 150);    //Velocidad media
+
+  //Volvemos a hacer los movimientos pero con la nueva velocidad 
+  adelante();
+  delay(1000);
+  stop();
+  delay(2000);
+  atras();
+  delay(1000);
+
+  //Debio realizar lo mismo pero a menor velocida

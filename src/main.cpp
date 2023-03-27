@@ -85,54 +85,116 @@ void setup() {
 
 void loop() {
 
-  //Para establecer una velocidad a los motores hacemos
-  //una escritura analogica, ponemos el pin de velocidad
-  //de motor y la velocidad a asignar donde 255 es la máxima
-  analogWrite(enA, 255);    //Velocidad máxima
-  analogWrite(enB, 255);    //Velocidad máxima
+  if(distanciafrontal()<10){
+    //Si entra aqui es porque se topo una pared frontal
+    stop();
+    //Poner un tiempo de espera
 
-  analogWrite(enC, 255);    //Velocidad máxima
-  analogWrite(enD, 255);    //Velocidad máxima
-  
-  //Para mover el robot mandamos a llamar a las funciones 
-  //declaradas arriba, seguido de un delay de duración y 
-  //la siguiente accion
+    //Recibe 1 si hay salida a la derecha
+    //Recibe 2 si hay salida a la izquierda
+    //Recibe 3 si hay salida para ambos lados
+    //Recibe 4 si no hay salida a ningun lado
+    switch (ladolibre()){
+      case 1:
+      break;
 
-  //Ejemplo si queremos mover hacia adelante 1 segundo
-  //luego detenerse 2 segundos
-  //luego ir atras 1 segundo
+      case 2:
+      break;
 
-  adelante();
-  delay(1000);
-  stop();
-  delay(2000);
-  atras();
-  delay(1000);
+      case 3:
+      break;
 
-  //la acción pasada la hizo con la velocidad establecida en las lineas 144-148
-  //Si queremos modificar la velocidad volvemos a hacer una escritura analogica con los nuevos valores de velocidad
+      case 4:
+      break;
 
-  analogWrite(enA, 150);    //Velocidad media
-  analogWrite(enB, 150);    //Velocidad media
+    }
 
-  analogWrite(enC, 150);    //Velocidad media
-  analogWrite(enD, 150);    //Velocidad media
-
-  //Volvemos a hacer los movimientos pero con la nueva velocidad 
-  adelante();
-  delay(1000);
-  stop();
-  delay(2000);
-  atras();
-  delay(1000);
-
-  //Debio realizar lo mismo pero a menor velocida
+  }else{
+    //Si no hay pared ir hacia adelante
+    setvelocity(150, 150, 150, 150);
+    adelante();
+  }
 
 }
 
-//INDICACIONES IMPORTANTES
-//Si el robot en la función adelante algún motor va en dirección contraria intercambiar los cables de giro en el puente h 
-//de ese motor en especifico 
+int distanciafrontal(){
+  long time;
+  long distanciafrontal;
+
+  digitalWrite(uft, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(uft, LOW);
+
+  time = pulseIn(ufe, HIGH);
+  distanciafrontal = time / 59;
+
+  return distanciafrontal;
+}
+
+int distanciaizquierda(){
+  long time;
+  long distanciaizquierda;
+
+  digitalWrite(uft, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(uft, LOW);
+
+  time = pulseIn(ufe, HIGH);
+  distanciaizquierda = time / 59;
+
+  return distanciaizquierda;
+}
+
+int distanciaderecha(){
+  long time;
+  long distanciaderecha;
+
+  digitalWrite(uft, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(uft, LOW);
+
+  time = pulseIn(ufe, HIGH);
+  distanciaderecha = time / 59;
+
+  return distanciaderecha;
+}
+
+void setvelocity(int m1, int m2, int m3, int m4){
+  analogWrite(enA, m1);
+  analogWrite(enB, m2);
+  analogWrite(enC, m3);
+  analogWrite(enD, m4);
+}
+
+int ladolibre(){
+
+//Devolver 1 si hay salida a la derecha
+//Devolver 2 si hay salida a la izquierda
+//Devolver 3 si hay salida para ambos lados
+//Devolver 4 si no hay salida a ningun lado
+
+  if(distanciaderecha()<10){
+    if(distanciaizquierda()<10){
+      //Sin salida, devolverse
+
+      return 4;
+    }else{
+      //Solo salida a la izquierda
+
+      return 2;
+    }
+  }else{
+    if(distanciaizquierda()<10){
+      //Solo salida a la derecha
+
+      return 1;
+    }else{
+      //Salida a ambos lados
+
+      return 3;
+    }
+  }
+}
 
 
 /************************ FUNCIONES DE MOVIMIENTO DEL ROBOT************************************************/
@@ -241,8 +303,3 @@ void lateralizquierda(){
   digitalWrite(m4_1, LOW);
   digitalWrite(m4_2, HIGH);
 }
-
-//LA TABLA LÓGICA DE LOS GIROS ESTA EN ESTA CARPETA CON EL NOMBRE "Tabla logica.png"
-//Los giros estan en la imagen "Giros de robot.png"
-
-
