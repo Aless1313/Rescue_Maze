@@ -6,10 +6,10 @@
 
             /*----------------SENSOR DELANTERO---------------*/
             /*m1_1/m1_2                             m2_1/m2_2*/
-            /**//*Delante Izq                     Delante Der*/  /**/
+        /**//*Delante Izq                     Delante Der*/  /**/
 //SENSOR    /*                                               */  //SENSOR 
 //IZQUIERDO /*                                               */  //DERECHO
-            /**//*m3_1/m3_2                          m4_1/4_2*/  /**/
+        /**//*m3_1/m3_2                          m4_1/4_2*/  /**/
             /*Atras Izq                             Atras Der*/
             /*---------------------ATRAS---------------------*/
 
